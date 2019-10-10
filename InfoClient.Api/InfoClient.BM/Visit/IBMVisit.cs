@@ -17,5 +17,6 @@ namespace InfoClient.BM.Visit
         DTResponse CreateVisit(DTVisit objClient);
         bool DeleteVitis(int IdClient);
         List<DTVisit> GetAllVisits(int IdClient);
+        List<DTVisitsByCity> GetAllVisitsByCity();
     }
 }

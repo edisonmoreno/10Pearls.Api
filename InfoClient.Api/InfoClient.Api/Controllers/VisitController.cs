@@ -37,6 +37,16 @@ namespace InfoClient.Api.Controllers
             return objVisits;
         }
 
+        [HttpGet]
+        [Route("GetAllVisitsByCity")]
+        public ActionResult<List<DTVisitsByCity>> GetAllVisitsByCity(int IdClient)
+        {
+            List<DTVisitsByCity> objVisits = new List<DTVisitsByCity>();
+            objVisits = _ObjVisit.GetAllVisitsByCity();
+            return objVisits;
+        }
+
+
         [HttpPost]
         [Route("CreateVisit")]
         public ActionResult<DTResponse> CreateVisit(DTVisit objVisit)

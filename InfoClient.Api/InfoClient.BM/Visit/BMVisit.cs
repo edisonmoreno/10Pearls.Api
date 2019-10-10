@@ -5,19 +5,23 @@
     using System.Text;
     using AutoMapper;
     using InfoClient.DM.Visit;
+    using InfoClient.DM.Client;
     using InfoClient.DM.Database;
     using InfoClient.DT.Client;
     using System.Linq;
+    using Microsoft.EntityFrameworkCore;
 
     public class BMVisit : IBMVisit
     {
         private IVisitRepository _ObjVisitRepository;
+        private IClientRepository _ObjClientRepository;
         private readonly IMapper _Objmapper;
 
         //Constructor
-        public BMVisit(IVisitRepository VisitRepository, IMapper mapper)
+        public BMVisit(IVisitRepository VisitRepository, IClientRepository ClientRepository, IMapper mapper)
         {
             _ObjVisitRepository = VisitRepository;
+            _ObjClientRepository = ClientRepository;
             _Objmapper = mapper;
         }
 
@@ -97,5 +101,40 @@
                 throw ex;
             }
         }
+
+        /// <summary>
+        /// Get all visits of data base by city
+        /// </summary>
+        /// <returns>List<DTVisit></returns>
+        public List<DTVisitsByCity> GetAllVisitsByCity()
+        {
+            List<DTVisitsByCity> VisitsByCity = new List<DTVisitsByCity>();
+            try
+            {
+               var Query = _ObjVisitRepository.GetAll().Join(_ObjClientRepository.GetAll(),
+                   visit => visit.IdClient,
+                   client => client.IdClient,
+                   (visit, client) => new { Visit = visit, client = client }).ToList();
+
+                if (Query != null)
+                {
+                    List<int> cities = new List<int>();
+                    foreach (var item in Query)
+                    {
+                       cities.Add(item.client.IdCity);
+                    }
+
+                    var result = cities.GroupBy(n => n)
+                                 .Select(c => new DTVisitsByCity { idcity = c.Key, totalvisits = c.Count() }).ToList();
+                    VisitsByCity = result;
+                }
+                return VisitsByCity; 
+            }
+            catch (Exception ex)
+            {
+                throw ex;
+            }
+        }
+
     }
 }
