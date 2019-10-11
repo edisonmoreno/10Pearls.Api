@@ -74,7 +74,6 @@
             }
         }
 
-
         /// <summary>
         /// Get all visits of data base
         /// </summary>

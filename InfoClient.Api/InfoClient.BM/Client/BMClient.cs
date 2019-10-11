@@ -74,10 +74,17 @@ namespace InfoClient.BM.Client
             DTResponse Resp = new DTResponse();
             try
             {
+                Client Client = _ObjClientRepository.GetAllBy(i => i.IdClient == objClient.IdClient).FirstOrDefault();
+                //Calculate available credit
+                if (Client != null)
+                {
+                    int diferenceCredit = objClient.CreditLimit - Client.CreditLimit;
+                    objClient.AvailableCredit = objClient.AvailableCredit + diferenceCredit;
+                }
                 objClient.Nit = Base64Encode(objClient.Nit);
-                Client ClientBD = new Client();
-                ClientBD = _Objmapper.Map<Client>(objClient);
-                _ObjClientRepository.Update(ClientBD);
+                //Client ClientBD = new Client();
+                Client = _Objmapper.Map<Client>(objClient);
+                _ObjClientRepository.Update(Client);
 
                 Resp.response = true;
                 Resp.message = "Success";

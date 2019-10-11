@@ -7,8 +7,8 @@
 
     public class DTVisitsByCity
     {
-        public int idcity { set; get; }
         public int totalvisits { set; get; }
         public string namecity { get; set; }
+        public int idcity { set; get; }
     }
 }

@@ -59,7 +59,7 @@ namespace InfoClient.DM.Repository
 
         public IQueryable<TEntity> GetAllBy(Expression<Func<TEntity, bool>> predicate)
         {
-            IQueryable<TEntity> query = Data.Where(predicate);
+            IQueryable<TEntity> query = Data.AsNoTracking().Where(predicate);
             return query;
         }
 
